@@ -24,7 +24,7 @@ RUN dpkg --add-architecture i386 \
 
 # Set up environment variables
 ENV ANDROID_HOME="/home/user/android-sdk-linux" \
-    SDK_URL="https://dl.google.com/android/repository/build-tools_r26.0.2-linux.zip" \
+    SDK_URL="https://dl.google.com/android/repository/tools_r25.2.5-linux.zip" \
     GRADLE_URL="https://services.gradle.org/distributions/gradle-3.3-all.zip"
 
 # Create a non-root user
@@ -35,7 +35,7 @@ WORKDIR /home/user
 # Download Android SDK
 RUN mkdir "$ANDROID_HOME" .android \
  && cd "$ANDROID_HOME" \
- && curl -o sdk.zip $SDK_URL \
+ && wget $SDK_URL -O sdk.zip \
  && unzip sdk.zip \
  && rm sdk.zip \
  && mkdir licenses \
@@ -49,7 +49,11 @@ RUN wget $GRADLE_URL -O gradle.zip \
  && rm gradle.zip \
  && mkdir .gradle
 
-ENV PATH="/home/user/gradle/bin:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools:${PATH}"
+ENV PATH="/home/user/gradle/bin:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}:${ANDROID_HOME}/platform-tools:${PATH}"
+
+RUN sdkmanager --update
+
+RUN sdkmanager "platform-tools" "platforms;android-26" "build-tools;26.0.0" "build-tools;26.0.1" "build-tools;26.0.2"
 
 USER "${JENKINS_USER}"
 
