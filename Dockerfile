@@ -57,4 +57,6 @@ RUN sdkmanager "platform-tools" "platforms;android-23" "platforms;android-26" "b
 
 USER "${JENKINS_USER}"
 
+CMD ["chmod", "+x", "/usr/local/bin/jenkins-slave.sh"]
+
 ENTRYPOINT ["/usr/local/bin/jenkins-slave.sh"]
