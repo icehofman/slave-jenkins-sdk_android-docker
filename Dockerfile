@@ -11,7 +11,6 @@ RUN curl --create-dirs -sSLo /usr/share/jenkins/swarm-client-${JENKINS_SWARM_VER
   && chmod 755 /usr/share/jenkins
 
 COPY jenkins-slave.sh /usr/local/bin/jenkins-slave.sh
-CMD  chmod +x /usr/local/bin/jenkins-slave.sh
 
 RUN mkdir /docker-entrypoint-init.d
 ONBUILD ADD ./*.sh /docker-entrypoint-init.d/
