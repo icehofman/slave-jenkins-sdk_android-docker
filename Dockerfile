@@ -46,7 +46,7 @@ RUN mkdir "$ANDROID_HOME" .android \
 # Install Gradle
 RUN wget $GRADLE_URL -O gradle.zip \
  && unzip gradle.zip \
- && mv gradle-3.3 gradle \
+ && mv gradle-4.1 gradle \
  && rm gradle.zip \
  && mkdir .gradle
 
@@ -54,7 +54,9 @@ ENV PATH="/home/user/gradle/bin:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:
 
 RUN sdkmanager --update
 
-RUN sdkmanager "platform-tools" "platforms;android-23" "platforms;android-26" "build-tools;23.0.0" "build-tools;26.0.0" "build-tools;26.0.1" "build-tools;26.0.2" "extras;android;m2repository"
+RUN sdkmanager "platform-tools" "platforms;android-23" "platforms;android-26" "platforms;android-27" "build-tools;23.0.0" "build-tools;26.0.0" "build-tools;27.0.0" "build-tools;26.0.1" "build-tools;26.0.2" "extras;android;m2repository"
+
+RUN yes | sdkmanager --licenses
 
 USER "${JENKINS_USER}"
 
