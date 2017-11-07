@@ -56,9 +56,9 @@ RUN wget $GRADLE_URL -O gradle.zip \
 
 ENV PATH="/home/user/gradle/bin:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}:${ANDROID_HOME}/platform-tools:${PATH}"
 
-RUN sdkmanager --update
+RUN echo yes | sdkmanager "platform-tools" "platforms;android-23" "platforms;android-26" "platforms;android-27" "build-tools;23.0.0" "build-tools;26.0.0" "build-tools;27.0.0" "build-tools;26.0.1" "build-tools;26.0.2" "extras;android;m2repository"
 
-RUN sdkmanager "platform-tools" "platforms;android-23" "platforms;android-26" "platforms;android-27" "build-tools;23.0.0" "build-tools;26.0.0" "build-tools;27.0.0" "build-tools;26.0.1" "build-tools;26.0.2" "extras;android;m2repository"
+RUN sdkmanager --update
 
 USER "${JENKINS_USER}"
 
