@@ -56,8 +56,6 @@ RUN wget $GRADLE_URL -O gradle.zip \
 
 ENV PATH="/home/user/gradle/bin:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}:${ANDROID_HOME}/platform-tools:${PATH}"
 
-RUN yes | sdkmanager --licenses
-
 RUN sdkmanager "platform-tools"
 
 RUN yes | sdkmanager \
@@ -90,6 +88,8 @@ RUN yes | sdkmanager \
     "add-ons;addon-google_apis-google-23" \
     "add-ons;addon-google_apis-google-22" \
     "add-ons;addon-google_apis-google-21"
+
+RUN sdkmanager --update
 
 USER "${JENKINS_USER}"
 
