@@ -41,7 +41,11 @@ RUN mkdir "$ANDROID_HOME" .android \
  && rm sdk.zip \
  && mkdir licenses \
  && echo -n 8933bad161af4178b1185d1a37fbf41ea5269c55 \
-        > licenses/android-sdk-license
+        > licenses/android-sdk-license \
+ && echo -n 84831b9409646a918e30573bab4c9c91346d8abd \
+        > licenses/android-sdk-preview-license \
+ && echo -n d975f751698a77b662f1254ddbeed3901e976f5a \
+        > licenses/intel-android-extra-license       
 
 # Install Gradle
 RUN wget $GRADLE_URL -O gradle.zip \
@@ -55,8 +59,6 @@ ENV PATH="/home/user/gradle/bin:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:
 RUN sdkmanager --update
 
 RUN sdkmanager "platform-tools" "platforms;android-23" "platforms;android-26" "platforms;android-27" "build-tools;23.0.0" "build-tools;26.0.0" "build-tools;27.0.0" "build-tools;26.0.1" "build-tools;26.0.2" "extras;android;m2repository"
-
-RUN echo yes | sdkmanager --licenses
 
 USER "${JENKINS_USER}"
 
