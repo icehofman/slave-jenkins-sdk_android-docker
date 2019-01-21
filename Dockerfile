@@ -16,36 +16,13 @@ RUN chmod +x /usr/local/bin/jenkins-slave.sh
 RUN mkdir /docker-entrypoint-init.d
 ONBUILD ADD ./*.sh /docker-entrypoint-init.d/
 
-# Install Git and dependencies
-RUN dpkg --add-architecture i386 \
- && apt-get update \
- && apt-get install -y file git curl zip libncurses5:i386 libstdc++6:i386 zlib1g:i386 \
- && apt-get clean \
- && rm -rf /var/lib/apt/lists /var/cache/apt
-
 # Set up environment variables
-ENV ANDROID_HOME="/home/user/android-sdk-linux" \
-    SDK_URL="https://dl.google.com/android/repository/tools_r25.2.5-linux.zip" \
-    GRADLE_URL="https://services.gradle.org/distributions/gradle-4.1-all.zip"
+ENV GRADLE_URL="https://services.gradle.org/distributions/gradle-4.1-all.zip"
 
 # Create a non-root user
 RUN useradd -m user
 USER user
 WORKDIR /home/user
-
-# Download Android SDK
-RUN mkdir "$ANDROID_HOME" .android \
- && cd "$ANDROID_HOME" \
- && wget $SDK_URL -O sdk.zip \
- && unzip sdk.zip \
- && rm sdk.zip \
- && mkdir licenses \
- && echo -n 8933bad161af4178b1185d1a37fbf41ea5269c55 \
-        > licenses/android-sdk-license \
- && echo -n 84831b9409646a918e30573bab4c9c91346d8abd \
-        > licenses/android-sdk-preview-license \
- && echo -n d975f751698a77b662f1254ddbeed3901e976f5a \
-        > licenses/intel-android-extra-license       
 
 # Install Gradle
 RUN wget $GRADLE_URL -O gradle.zip \
@@ -54,23 +31,7 @@ RUN wget $GRADLE_URL -O gradle.zip \
  && rm gradle.zip \
  && mkdir .gradle
 
-ENV PATH="/home/user/gradle/bin:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}:${ANDROID_HOME}/platform-tools:${PATH}"
-
-RUN sdkmanager "platform-tools"
-
-RUN yes | sdkmanager \
-    "platforms;android-27" \   
-    "build-tools;27.0.0" \    
-    "extras;android;m2repository" \
-    "extras;google;m2repository" \
-    "extras;google;google_play_services" \
-    "extras;m2repository;com;android;support;constraint;constraint-layout;1.0.2" \
-    "extras;m2repository;com;android;support;constraint;constraint-layout;1.0.1" \
-    "add-ons;addon-google_apis-google-23" \
-    "add-ons;addon-google_apis-google-22" \
-    "add-ons;addon-google_apis-google-21"
-
-RUN sdkmanager --update
+ENV PATH="/home/user/gradle/bin:${PATH}"
 
 USER "${JENKINS_USER}"
 
